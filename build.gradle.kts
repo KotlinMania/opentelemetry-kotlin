@@ -942,14 +942,12 @@ tasks.register("swiftExportSmokeTest") {
 
     doLast {
         val execOperations = serviceOf<ExecOperations>()
-        val swiftBuildFile =
+        val swiftBuildDir =
             layout.buildDirectory
                 .dir("swift-test")
                 .get()
                 .asFile
-        swiftBuildFile.deleteRecursively()
-        swiftBuildFile.mkdirs()
-        val swiftBuildDir = swiftBuildFile.absolutePath
+                .absolutePath
         layout.buildDirectory
             .dir("bin/macosArm64/SwiftExportBinaryDebugStatic")
             .get()
@@ -996,13 +994,16 @@ tasks.register("swiftExportSmokeTest") {
             }
         }
 
-        val scratchDir = layout.buildDirectory.dir("swift-test-scratch").get().asFile
-        scratchDir.deleteRecursively()
+        execOperations
+            .exec {
+                workingDir = layout.projectDirectory.dir("swift-test-harness").asFile
+                commandLine("swift", "package", "reset")
+            }.assertNormalExitValue()
 
         execOperations
             .exec {
                 workingDir = layout.projectDirectory.dir("swift-test-harness").asFile
-                commandLine("swift", "test", "--scratch-path", scratchDir.absolutePath)
+                commandLine("swift", "test")
             }.assertNormalExitValue()
     }
 }
