@@ -1,55 +1,117 @@
-// port-lint: tests tmp/opentelemetry/src/common.rs
+// port-lint: tests common.rs
 package io.github.kotlinmania.opentelemetry
 
+import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 class CommonTest {
+    fun hashHelper(item: Any): Long {
+        return item.hashCode().toLong()
+    }
     @Test
-    fun testKey() {
-        val key1 = Key.from("service.name")
-        val key2 = Key("service.name")
-        assertEquals(key1, key2)
-        assertEquals("service.name", key1.asString())
+    fun kvFloatEquality() {
+        val kv1 = KeyValue.new("key", 1.0)
+        val kv2 = KeyValue.new("key", 1.0)
+        assertEquals(kv1, kv2)
+
+        val kv3 = KeyValue.new("key", 1.0)
+        val kv4 = KeyValue.new("key", 1.01)
+        assertNotEquals(kv3, kv4)
+
+        val kvNan1 = KeyValue.new("key", Double.NaN)
+        val kvNan2 = KeyValue.new("key", Double.NaN)
+        assertNotEquals(kvNan1, kvNan2)
+
+        val floatValues = listOf(
+            Double.POSITIVE_INFINITY,
+            Double.NEGATIVE_INFINITY,
+            Double.MAX_VALUE,
+            Double.MIN_VALUE,
+        )
+        for (floatVal in floatValues) {
+            val a = KeyValue.new("key", floatVal)
+            val b = KeyValue.new("key", floatVal)
+            assertEquals(a, b)
+        }
+
+        for (i in 0 until 100) {
+            val randomValue = Random.nextDouble()
+            val a = KeyValue.new("key", randomValue)
+            val b = KeyValue.new("key", randomValue)
+            assertEquals(a, b)
+        }
     }
 
     @Test
-    fun testKeyValue() {
-        val kvStr = KeyValue("http.status_code", 200L)
-        assertEquals("http.status_code", kvStr.key.name)
-        assertEquals(Value.of(200L), kvStr.value)
+    fun kvFloatHash() {
+        val floatValues = listOf(
+            Double.NaN,
+            Double.POSITIVE_INFINITY,
+            Double.NEGATIVE_INFINITY,
+            Double.MAX_VALUE,
+            Double.MIN_VALUE,
+        )
+        for (floatVal in floatValues) {
+            val kv1 = KeyValue.new("key", floatVal)
+            val kv2 = KeyValue.new("key", floatVal)
+            assertEquals(hashHelper(kv1), hashHelper(kv2))
+        }
 
-        val kvBool = KeyValue("success", true)
-        assertEquals(Value.of(true), kvBool.value)
+        for (i in 0 until 100) {
+            val randomValue = Random.nextDouble()
+            val kv1 = KeyValue.new("key", randomValue)
+            val kv2 = KeyValue.new("key", randomValue)
+            assertEquals(hashHelper(kv1), hashHelper(kv2))
+        }
     }
 
     @Test
-    fun testInstrumentationScope() {
-        val scope = InstrumentationScope.builder("my-instrumentation")
-            .withVersion("1.0.0")
-            .withSchemaUrl("https://opentelemetry.io/schemas/1.21.0")
-            .withAttributes(listOf(KeyValue("env", "prod")))
+    fun instrumentationScopeEquality() {
+        val scope1 = InstrumentationScope.builder("my-crate")
+            .withVersion("v0.1.0")
+            .withSchemaUrl("https://opentelemetry.io/schemas/1.17.0")
+            .withAttributes(listOf(KeyValue.new("k", "v")))
             .build()
-
-        assertEquals("my-instrumentation", scope.name)
-        assertEquals("1.0.0", scope.version)
-        assertEquals("https://opentelemetry.io/schemas/1.21.0", scope.schemaUrl)
-        assertEquals(1, scope.attributes.size)
+        val scope2 = InstrumentationScope.builder("my-crate")
+            .withVersion("v0.1.0")
+            .withSchemaUrl("https://opentelemetry.io/schemas/1.17.0")
+            .withAttributes(listOf(KeyValue.new("k", "v")))
+            .build()
+        assertEquals(scope1, scope2)
     }
 
     @Test
-    fun testBaggage() {
-        val baggage = Baggage.new()
-        baggage.insert("user_id", "12345", "role=admin")
+    fun instrumentationScopeEqualityAttributesDiffOrder() {
+        val scope1 = InstrumentationScope.builder("my-crate")
+            .withVersion("v0.1.0")
+            .withSchemaUrl("https://opentelemetry.io/schemas/1.17.0")
+            .withAttributes(listOf(KeyValue.new("k1", "v1"), KeyValue.new("k2", "v2")))
+            .build()
+        val scope2 = InstrumentationScope.builder("my-crate")
+            .withVersion("v0.1.0")
+            .withSchemaUrl("https://opentelemetry.io/schemas/1.17.0")
+            .withAttributes(listOf(KeyValue.new("k2", "v2"), KeyValue.new("k1", "v1")))
+            .build()
+        assertEquals(scope1, scope2)
+        assertEquals(hashHelper(scope1), hashHelper(scope2))
+    }
 
-        assertEquals(StringValue("12345"), baggage.get("user_id"))
-        assertEquals(BaggageMetadata("role=admin"), baggage.getMetadata("user_id"))
-        assertEquals(1, baggage.size())
-
-        baggage.remove("user_id")
-        assertNull(baggage.get("user_id"))
-        assertTrue(baggage.isEmpty())
+    @Test
+    fun instrumentationScopeEqualityDifferentAttributes() {
+        val scope1 = InstrumentationScope.builder("my-crate")
+            .withVersion("v0.1.0")
+            .withSchemaUrl("https://opentelemetry.io/schemas/1.17.0")
+            .withAttributes(listOf(KeyValue.new("k1", "v1"), KeyValue.new("k2", "v2")))
+            .build()
+        val scope2 = InstrumentationScope.builder("my-crate")
+            .withVersion("v0.1.0")
+            .withSchemaUrl("https://opentelemetry.io/schemas/1.17.0")
+            .withAttributes(listOf(KeyValue.new("k2", "v3"), KeyValue.new("k4", "v5")))
+            .build()
+        assertNotEquals(scope1, scope2)
+        assertNotEquals(hashHelper(scope1), hashHelper(scope2))
     }
 }

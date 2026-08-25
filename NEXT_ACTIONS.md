@@ -4,12 +4,12 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 2/35 (5.7%)
-- **Function parity:** 13/357 matched (target 38) — 3.6%
-- **Class/type parity:** 8/91 matched (target 16) — 8.8%
-- **Combined symbol parity:** 21/448 matched (target 54) — 4.7%
-- **Average inline-code cosine:** 0.10 (function body across 2 matched files)
-- **Average documentation cosine:** 0.52 (doc text across 2 matched files)
+- **Files Present:** 3/35 (8.6%)
+- **Function parity:** 96/356 matched (target 182) — 27.0%
+- **Class/type parity:** 24/91 matched (target 34) — 26.4%
+- **Combined symbol parity:** 120/447 matched (target 216) — 26.8%
+- **Average inline-code cosine:** 0.52 (function body across 3 matched files)
+- **Average documentation cosine:** 0.39 (doc text across 3 matched files)
 - **Cheat-zeroed Files:** 0
 - **Critical Issues:** 2 files with <0.60 function similarity
 
@@ -27,37 +27,42 @@ No missing high-value files detected.
 
 Every matched file is listed below with function and type symbol parity.
 
-### 1. baggage
+### 1. context
 
-- **Target:** `opentelemetry.Baggage [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.09
-- **Dependents:** 0
-- **Priority Score:** 324009.1
-- **Functions:** 6/32 matched (target 15)
-- **Missing functions:** `get_default_baggage`, `get_with_metadata`, `insert_with_metadata`, `len`, `iter`, `is_key_valid`, `key_value_metadata_bytes_size`, `next`, `into_iter`, `from_iter`, `encode`, `fmt`, `with_baggage`, `current_with_baggage`, `with_cleared_baggage`, `baggage`, `as_str`, `insert_non_ascii_key`, `test_ascii_values`, `insert_too_much_baggage`, `insert_pairs_length_exceed`, `serialize_baggage_as_string`, `replace_existing_key`, `test_crud_operations`, `test_insert_invalid_key`, `test_context_clear_baggage`
-- **Types:** 2/8 matched (target 2)
-- **Missing types:** `Iter`, `Item`, `IntoIter`, `BaggageExt`, `BaggageContextValue`, `KeyValueMetadata`
-- **Tests:** 0/9 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tmp/opentelemetry/src/baggage.rs` vs expected `baggage.rs`
-- **Proposed provenance header:** `// port-lint: source baggage.rs` (current: `// port-lint: source tmp/opentelemetry/src/baggage.rs`)
+- **Target:** `opentelemetry.Context`
+- **Similarity:** 0.63
+- **Dependents:** 1
+- **Priority Score:** 1024703.7
+- **Functions:** 38/40 matched (target 49)
+- **Missing functions:** `nested_operation`, `create_a_future`
+- **Types:** 7/7 matched (target 8)
+- **Missing types:** _none_
+- **Tests:** 16/18 matched
 - **Lint issues:** 1
 
 ### 2. common
 
-- **Target:** `opentelemetry.Common [PROVENANCE-FALLBACK]`
-- **Similarity:** 0.10
+- **Target:** `opentelemetry.Common`
+- **Similarity:** 0.37
 - **Dependents:** 0
-- **Priority Score:** 233609.0
-- **Functions:** 7/27 matched (target 23)
-- **Missing functions:** `from_static_str`, `as_str`, `fmt`, `borrow`, `as_ref`, `partial_cmp`, `cmp`, `eq`, `hash`, `display_array_str`, `name`, `version`, `schema_url`, `attributes`, `kv_float_equality`, `kv_float_hash`, `hash_helper`, `instrumentation_scope_equality`, `instrumentation_scope_equality_attributes_diff_order`, `instrumentation_scope_equality_different_attributes`
-- **Types:** 6/9 matched (target 14)
-- **Missing types:** `OtelString`, `Array`, `F64Hashable`
-- **Tests:** 0/6 matched
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tmp/opentelemetry/src/common.rs` vs expected `common.rs`
-- **Provenance warning:** port-lint provenance header matched only after fallback normalization: `tests:tmp/opentelemetry/src/common.rs` vs expected `common.rs`
-- **Proposed provenance header:** `// port-lint: source common.rs` (current: `// port-lint: source tmp/opentelemetry/src/common.rs`)
-- **Proposed provenance header:** `// port-lint: tests common.rs` (current: `// port-lint: tests tmp/opentelemetry/src/common.rs`)
-- **Lint issues:** 2
+- **Priority Score:** 13606.3
+- **Functions:** 26/27 matched (target 84)
+- **Missing functions:** `hash_helper`
+- **Types:** 9/9 matched (target 17)
+- **Missing types:** _none_
+- **Tests:** 5/6 matched
+
+### 3. baggage
+
+- **Target:** `opentelemetry.Baggage`
+- **Similarity:** 0.56
+- **Dependents:** 0
+- **Priority Score:** 4004.4
+- **Functions:** 32/32 matched (target 49)
+- **Missing functions:** _none_
+- **Types:** 8/8 matched (target 9)
+- **Missing types:** _none_
+- **Tests:** 9/9 matched
 
 ## Success Criteria
 
