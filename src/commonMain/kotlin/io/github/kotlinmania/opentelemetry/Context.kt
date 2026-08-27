@@ -3,11 +3,15 @@ package io.github.kotlinmania.opentelemetry
 
 import kotlin.reflect.KClass
 
-public class IdHasher(private var value: Long = 0L) {
+public class IdHasher(
+    private var value: Long = 0L,
+) {
     public fun write(bytes: ByteArray) {}
+
     public fun writeU64(id: Long) {
         value = id
     }
+
     public fun finish(): Long = value
 }
 
@@ -66,9 +70,7 @@ public class ContextStack {
         }
     }
 
-    public fun <T> mapCurrentCx(f: (Context) -> T): T {
-        return f(currentCx)
-    }
+    public fun <T> mapCurrentCx(f: (Context) -> T): T = f(currentCx)
 
     public companion object {
         public const val BASE_POS: Int = 0
@@ -118,13 +120,9 @@ public class Context internal constructor(
         return ContextGuard(id, currentStack)
     }
 
-    public fun currentWithSynchronizedSpan(value: Any): Context {
-        return withValue("__span", value)
-    }
+    public fun currentWithSynchronizedSpan(value: Any): Context = withValue("__span", value)
 
-    public fun withSynchronizedSpan(value: Any): Context {
-        return withValue("__span", value)
-    }
+    public fun withSynchronizedSpan(value: Any): Context = withValue("__span", value)
 
     public fun fmt(): String = toString()
 
@@ -139,25 +137,15 @@ public class Context internal constructor(
 
         public fun current(): Context = currentStack.currentCx
 
-        public fun <T : Any> currentWithValue(value: T): Context {
-            return current().withValue(value)
-        }
+        public fun <T : Any> currentWithValue(value: T): Context = current().withValue(value)
 
-        public fun currentWithValue(key: String, value: String): Context {
-            return current().withValue(key, value)
-        }
+        public fun currentWithValue(key: String, value: String): Context = current().withValue(key, value)
 
-        public fun <T> mapCurrent(f: (Context) -> T): T {
-            return currentStack.mapCurrentCx(f)
-        }
+        public fun <T> mapCurrent(f: (Context) -> T): T = currentStack.mapCurrentCx(f)
 
-        public fun enterTelemetrySuppressedScope(): ContextGuard {
-            return current().withTelemetrySuppressed().attach()
-        }
+        public fun enterTelemetrySuppressedScope(): ContextGuard = current().withTelemetrySuppressed().attach()
 
-        public fun isCurrentTelemetrySuppressed(): Boolean {
-            return current().isTelemetrySuppressed()
-        }
+        public fun isCurrentTelemetrySuppressed(): Boolean = current().isTelemetrySuppressed()
 
         public fun setCurrent(context: Context) {
             currentStack.currentCx = context
