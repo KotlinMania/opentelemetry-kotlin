@@ -6,10 +6,11 @@ import kotlinx.serialization.Serializable
 public const val MAX_KEY_VALUE_PAIRS: Int = 64
 public const val MAX_LEN_OF_ALL_PAIRS: Int = 8192
 
-private fun isInvalidAsciiKeyChar(c: Char): Boolean = when (c) {
-    '(', ')', ',', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '{', '}', '"' -> true
-    else -> false
-}
+private fun isInvalidAsciiKeyChar(c: Char): Boolean =
+    when (c) {
+        '(', ')', ',', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '{', '}', '"' -> true
+        else -> false
+    }
 
 private val DEFAULT_BAGGAGE: Baggage by lazy { Baggage.new() }
 
@@ -26,9 +27,7 @@ public fun isKeyValid(key: String): Boolean {
     return true
 }
 
-public fun keyValueMetadataBytesSize(key: String, value: String, metadata: String): Int {
-    return key.length + value.length + metadata.length
-}
+public fun keyValueMetadataBytesSize(key: String, value: String, metadata: String): Int = key.length + value.length + metadata.length
 
 public fun encode(s: String): String {
     val bytes = s.encodeToByteArray()
@@ -42,7 +41,8 @@ public fun encode(s: String): String {
             0x2E, // .
             0x2D, // -
             0x5F, // _
-            0x7E -> sb.append(u.toChar()) // ~
+            0x7E,
+            -> sb.append(u.toChar()) // ~
             0x20 -> sb.append("%20") // space
             else -> {
                 val hex = u.toString(16).uppercase()
@@ -63,6 +63,7 @@ public data class BaggageMetadata(
     public val value: String = "",
 ) {
     public fun asStr(): String = value
+
     public fun fmt(): String = value
 
     override fun toString(): String = value
@@ -86,6 +87,7 @@ public data class KeyValueMetadata(
     public companion object {
         public fun new(key: Key, value: StringValue, metadata: BaggageMetadata): KeyValueMetadata =
             KeyValueMetadata(key, value, metadata)
+
         public fun new(key: String, value: String, metadata: String): KeyValueMetadata =
             KeyValueMetadata(Key(key), StringValue(value), BaggageMetadata(metadata))
     }
@@ -93,12 +95,12 @@ public data class KeyValueMetadata(
 
 public typealias Item = Pair<Key, Pair<StringValue, BaggageMetadata>>
 
-public class Iter internal constructor(private val iterator: Iterator<Item>) {
+public class Iter internal constructor(
+    private val iterator: Iterator<Item>,
+) {
     public constructor() : this(emptyList<Item>().iterator())
 
-    public fun next(): Item? {
-        return if (iterator.hasNext()) iterator.next() else null
-    }
+    public fun next(): Item? = if (iterator.hasNext()) iterator.next() else null
 }
 
 public typealias IntoIter = Iter
@@ -115,8 +117,11 @@ public data class BaggageContextValue(
  */
 public interface BaggageExt {
     public fun withBaggage(baggage: Baggage): Context
+
     public fun currentWithBaggage(baggage: Baggage): Context
+
     public fun withClearedBaggage(): Context
+
     public fun baggage(): Baggage
 }
 
@@ -129,6 +134,7 @@ public class Baggage internal constructor(
     private var kvContentLen: Int,
 ) {
     public constructor() : this(LinkedHashMap(), 0)
+
     public fun get(key: Key): StringValue? = inner[key]?.first
 
     public fun get(key: String): StringValue? = get(Key(key))
@@ -208,19 +214,24 @@ public class Baggage internal constructor(
 
     public fun intoIter(): Iter = iter()
 
-    public fun encode(s: String): String = io.github.kotlinmania.opentelemetry.encode(s)
+    public fun encode(s: String): String =
+        io.github.kotlinmania.opentelemetry
+            .encode(s)
 
     public fun fmt(): String = toString()
 
     override fun toString(): String {
-        val items = inner.entries.map { (k, v) ->
-            val encVal = io.github.kotlinmania.opentelemetry.encode(v.first.value)
-            if (v.second.value.isNotEmpty()) {
-                "${k.name}=$encVal;${v.second.value}"
-            } else {
-                "${k.name}=$encVal"
+        val items =
+            inner.entries.map { (k, v) ->
+                val encVal =
+                    io.github.kotlinmania.opentelemetry
+                        .encode(v.first.value)
+                if (v.second.value.isNotEmpty()) {
+                    "${k.name}=$encVal;${v.second.value}"
+                } else {
+                    "${k.name}=$encVal"
+                }
             }
-        }
         return items.joinToString(",")
     }
 
@@ -245,24 +256,18 @@ public class Baggage internal constructor(
     }
 }
 
-public fun Context.withBaggage(baggage: Baggage): Context {
-    return this.withValue(BaggageContextValue(baggage))
-}
+public fun Context.withBaggage(baggage: Baggage): Context = this.withValue(BaggageContextValue(baggage))
 
 public fun Context.withBaggage(entries: Iterable<KeyValue>): Context {
     val baggage = Baggage.fromKeyValues(entries)
     return this.withBaggage(baggage)
 }
 
-public fun Context.withClearedBaggage(): Context {
-    return this.withBaggage(Baggage.new())
-}
+public fun Context.withClearedBaggage(): Context = this.withBaggage(Baggage.new())
 
 public fun Context.baggage(): Baggage {
     val baggageVal = this.get(BaggageContextValue::class)
     return baggageVal?.baggage ?: getDefaultBaggage()
 }
 
-public fun currentWithBaggage(baggage: Baggage): Context {
-    return Context.mapCurrent { cx -> cx.withBaggage(baggage) }
-}
+public fun currentWithBaggage(baggage: Baggage): Context = Context.mapCurrent { cx -> cx.withBaggage(baggage) }

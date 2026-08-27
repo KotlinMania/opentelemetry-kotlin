@@ -4,12 +4,16 @@ package io.github.kotlinmania.opentelemetry
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-public data class ValueA(val value: Long)
-public data class ValueB(val value: Long)
+public data class ValueA(
+    val value: Long,
+)
+
+public data class ValueB(
+    val value: Long,
+)
 
 class ContextTest {
     @Test
@@ -50,11 +54,13 @@ class ContextTest {
                 assertEquals(ValueA(1), currentInner.get<ValueA>())
                 assertEquals(ValueB(42), currentInner.get<ValueB>())
 
-                assertTrue(Context.mapCurrent { cx ->
-                    assertEquals(ValueA(1), cx.get<ValueA>())
-                    assertEquals(ValueB(42), cx.get<ValueB>())
-                    true
-                })
+                assertTrue(
+                    Context.mapCurrent { cx ->
+                        assertEquals(ValueA(1), cx.get<ValueA>())
+                        assertEquals(ValueB(42), cx.get<ValueB>())
+                        true
+                    },
+                )
             } finally {
                 innerGuard.detach()
             }
@@ -112,9 +118,10 @@ class ContextTest {
     @Test
     fun testMapCurrentCx() {
         val stack = ContextStack.default()
-        val res = stack.mapCurrentCx { cx ->
-            cx.isTelemetrySuppressed()
-        }
+        val res =
+            stack.mapCurrentCx { cx ->
+                cx.isTelemetrySuppressed()
+            }
         assertFalse(res)
     }
 
@@ -143,9 +150,11 @@ class ContextTest {
 
     fun nestedOperation() {
         assertEquals(ValueA(42), Context.current().get<ValueA>())
-        val cxWithBoth = Context.current()
-            .withValue(ValueA(43))
-            .withValue(ValueB(24))
+        val cxWithBoth =
+            Context
+                .current()
+                .withValue(ValueA(43))
+                .withValue(ValueB(24))
         val guard = cxWithBoth.attach()
         try {
             assertEquals(ValueA(43), Context.current().get<ValueA>())

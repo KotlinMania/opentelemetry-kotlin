@@ -11,13 +11,21 @@ public data class Key(
     public val name: String,
 ) : Comparable<Key> {
     public fun asStr(): String = name
+
     public fun asString(): String = name
+
     public fun borrow(): String = name
+
     public fun asRef(): String = name
+
     public fun cmp(other: Key): Int = compareTo(other)
+
     public fun partialCmp(other: Key): Int? = compareTo(other)
+
     public fun eq(other: Any?): Boolean = this == other
+
     public fun hash(): Int = hashCode()
+
     public fun fmt(): String = toString()
 
     override fun compareTo(other: Key): Int = name.compareTo(other.name)
@@ -26,7 +34,9 @@ public data class Key(
 
     public companion object {
         public fun from(name: String): Key = Key(name)
+
         public fun fromStaticStr(name: String): Key = Key(name)
+
         public fun new(name: String): Key = Key(name)
     }
 }
@@ -39,12 +49,17 @@ public data class OtelString(
     public val value: String,
 ) : Comparable<OtelString> {
     public fun asStr(): String = value
+
     public fun cmp(other: OtelString): Int = value.compareTo(other.value)
+
     public fun partialCmp(other: OtelString): Int? = value.compareTo(other.value)
+
     public fun eq(other: Any?): Boolean = this == other
+
     public fun hash(): Int = hashCode()
 
     override fun compareTo(other: OtelString): Int = value.compareTo(other.value)
+
     override fun toString(): String = value
 }
 
@@ -56,8 +71,11 @@ public data class StringValue(
     public val value: String,
 ) {
     public fun asStr(): String = value
+
     public fun asString(): String = value
+
     public fun asRef(): String = value
+
     public fun fmt(): String = toString()
 
     override fun toString(): String = value
@@ -75,29 +93,41 @@ public sealed class Array {
     public abstract fun fmt(): String
 
     @Serializable
-    public data class Bool(public val values: List<Boolean>) : Array() {
+    public data class Bool(
+        public val values: List<Boolean>,
+    ) : Array() {
         override fun fmt(): String = displayArrayStr(values)
+
         override fun toString(): String = fmt()
     }
 
     @Serializable
-    public data class I64(public val values: List<Long>) : Array() {
+    public data class I64(
+        public val values: List<Long>,
+    ) : Array() {
         override fun fmt(): String = displayArrayStr(values)
+
         override fun toString(): String = fmt()
     }
 
     @Serializable
-    public data class F64(public val values: List<Double>) : Array() {
+    public data class F64(
+        public val values: List<Double>,
+    ) : Array() {
         override fun fmt(): String = displayArrayStr(values)
+
         override fun toString(): String = fmt()
     }
 
     @Serializable
-    public data class StringList(public val values: List<StringValue>) : Array() {
+    public data class StringList(
+        public val values: List<StringValue>,
+    ) : Array() {
         override fun fmt(): String {
             val join = values.joinToString(",") { "\"${it.value}\"" }
             return "[$join]"
         }
+
         override fun toString(): String = fmt()
     }
 }
@@ -118,23 +148,33 @@ public typealias ArrayValue = Array
 @Serializable
 public sealed class Value {
     public abstract fun asStr(): String
+
     public open fun fmt(): String = asStr()
 
     @Serializable
-    public data class Bool(public val value: Boolean) : Value() {
+    public data class Bool(
+        public val value: Boolean,
+    ) : Value() {
         override fun asStr(): String = value.toString()
+
         override fun toString(): String = asStr()
     }
 
     @Serializable
-    public data class I64(public val value: Long) : Value() {
+    public data class I64(
+        public val value: Long,
+    ) : Value() {
         override fun asStr(): String = value.toString()
+
         override fun toString(): String = asStr()
     }
 
     @Serializable
-    public data class F64(public val value: Double) : Value() {
+    public data class F64(
+        public val value: Double,
+    ) : Value() {
         override fun asStr(): String = value.toString()
+
         override fun toString(): String = asStr()
 
         override fun equals(other: Any?): Boolean {
@@ -148,23 +188,34 @@ public sealed class Value {
     }
 
     @Serializable
-    public data class StringVal(public val value: StringValue) : Value() {
+    public data class StringVal(
+        public val value: StringValue,
+    ) : Value() {
         override fun asStr(): String = value.value
+
         override fun toString(): String = asStr()
     }
 
     @Serializable
-    public data class ArrayVal(public val value: Array) : Value() {
+    public data class ArrayVal(
+        public val value: Array,
+    ) : Value() {
         override fun asStr(): String = value.fmt()
+
         override fun toString(): String = asStr()
     }
 
     public companion object {
         public fun of(value: Boolean): Value = Bool(value)
+
         public fun of(value: Long): Value = I64(value)
+
         public fun of(value: Double): Value = F64(value)
+
         public fun of(value: String): Value = StringVal(StringValue(value))
+
         public fun of(value: StringValue): Value = StringVal(value)
+
         public fun of(value: Array): Value = ArrayVal(value)
     }
 }
@@ -183,6 +234,7 @@ public data class F64Hashable(
     public fun hash(): Int = value.toBits().hashCode()
 
     override fun equals(other: Any?): Boolean = eq(other)
+
     override fun hashCode(): Int = hash()
 }
 
@@ -204,10 +256,15 @@ public data class KeyValue(
 
     public companion object {
         public fun new(key: Key, value: Value): KeyValue = KeyValue(key, value)
+
         public fun new(key: String, value: Value): KeyValue = KeyValue(Key(key), value)
+
         public fun new(key: String, value: String): KeyValue = KeyValue(Key(key), Value.of(value))
+
         public fun new(key: String, value: Long): KeyValue = KeyValue(Key(key), Value.of(value))
+
         public fun new(key: String, value: Double): KeyValue = KeyValue(Key(key), Value.of(value))
+
         public fun new(key: String, value: Boolean): KeyValue = KeyValue(Key(key), Value.of(value))
     }
 }
@@ -223,8 +280,11 @@ public data class InstrumentationScope(
     public val scopeAttributes: List<KeyValue> = emptyList(),
 ) {
     public fun name(): String = scopeName
+
     public fun version(): String? = scopeVersion
+
     public fun schemaUrl(): String? = scopeSchemaUrl
+
     public fun attributes(): List<KeyValue> = scopeAttributes
 
     override fun equals(other: Any?): Boolean {
@@ -281,16 +341,13 @@ public class InstrumentationScopeBuilder(
         return this
     }
 
-    public fun build(): InstrumentationScope {
-        return InstrumentationScope(
+    public fun build(): InstrumentationScope =
+        InstrumentationScope(
             scopeName = name,
             scopeVersion = version,
             scopeSchemaUrl = schemaUrl,
             scopeAttributes = attributes ?: emptyList(),
         )
-    }
 }
 
-public fun hashHelper(item: Any): Long {
-    return item.hashCode().toLong()
-}
+public fun hashHelper(item: Any): Long = item.hashCode().toLong()
