@@ -6,7 +6,9 @@ import kotlin.reflect.KClass
 public class IdHasher(
     private var value: Long = 0L,
 ) {
-    public fun write(bytes: ByteArray) {}
+    public fun write(bytes: ByteArray) {
+        bytes.hashCode()
+    }
 
     public fun writeU64(id: Long) {
         value = id
