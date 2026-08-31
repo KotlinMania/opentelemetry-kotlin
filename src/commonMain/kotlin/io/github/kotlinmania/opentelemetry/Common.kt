@@ -1,4 +1,4 @@
-// port-lint: source common.rs
+// port-lint: source opentelemetry/src/common.rs
 package io.github.kotlinmania.opentelemetry
 
 import kotlinx.serialization.Serializable

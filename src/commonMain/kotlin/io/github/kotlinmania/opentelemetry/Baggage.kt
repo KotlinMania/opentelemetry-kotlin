@@ -1,4 +1,4 @@
-// port-lint: source baggage.rs
+// port-lint: source opentelemetry/src/baggage.rs
 package io.github.kotlinmania.opentelemetry
 
 import kotlinx.serialization.Serializable
