@@ -15,5 +15,37 @@
     "todos": true,
     "lint": true
   },
-  "reexport_modules": []
+  "reexport_modules": [
+    "lib",
+    "lib.rs",
+    "opentelemetry/src/lib.rs",
+    "metrics/mod",
+    "metrics.mod",
+    "metrics/mod.rs",
+    "opentelemetry/src/metrics/mod.rs",
+    "metrics/instruments/mod",
+    "metrics.instruments.mod",
+    "metrics/instruments/mod.rs",
+    "opentelemetry/src/metrics/instruments/mod.rs",
+    "trace/mod",
+    "trace.mod",
+    "trace/mod.rs",
+    "opentelemetry/src/trace/mod.rs",
+    "testing/mod",
+    "testing.mod",
+    "testing/mod.rs",
+    "opentelemetry/src/testing/mod.rs",
+    "logs/mod",
+    "logs.mod",
+    "logs/mod.rs",
+    "opentelemetry/src/logs/mod.rs",
+    "propagation/mod",
+    "propagation.mod",
+    "propagation/mod.rs",
+    "opentelemetry/src/propagation/mod.rs",
+    "global/mod",
+    "global.mod",
+    "global/mod.rs",
+    "opentelemetry/src/global/mod.rs"
+  ]
 }

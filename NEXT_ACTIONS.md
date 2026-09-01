@@ -5,9 +5,9 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 3/41 (7.3%)
-- **Function parity:** 96/424 matched (target 182) — 22.6%
-- **Class/type parity:** 24/103 matched (target 34) — 23.3%
-- **Combined symbol parity:** 120/527 matched (target 216) — 22.8%
+- **Function parity:** 96/378 matched (target 182) — 25.4%
+- **Class/type parity:** 24/92 matched (target 34) — 26.1%
+- **Combined symbol parity:** 120/470 matched (target 216) — 25.5%
 - **Average inline-code cosine:** 0.52 (function body across 3 matched files)
 - **Average documentation cosine:** 0.39 (doc text across 3 matched files)
 - **Cheat-zeroed Files:** 0
@@ -71,4 +71,24 @@ For each file to be considered "complete":
 - All tests ported
 - Documentation ported
 - port-lint header present
+
+## Reexport / Wiring Modules
+
+These files match `reexport_modules` patterns in `.ast_distance_config.json`. They are filtered out of
+normal priority and missing-file ladders because they are wiring
+modules, not direct logic ports. Consult them for call-site routing;
+do not treat them as the next implementation target by default.
+
+### Missing
+
+| Source | Expected target | Deps | Source path | Expected path |
+|--------|-----------------|------|-------------|---------------|
+| `global.mod` | `opentelemetry.src.global.Mod` | 0 | `opentelemetry/src/global/mod.rs` | `opentelemetry/src/global/Mod.kt` |
+| `opentelemetry.lib` | `opentelemetry.src.Lib` | 0 | `opentelemetry/src/lib.rs` | `opentelemetry/src/Lib.kt` |
+| `logs.mod` | `opentelemetry.src.logs.Mod` | 0 | `opentelemetry/src/logs/mod.rs` | `opentelemetry/src/logs/Mod.kt` |
+| `instruments.mod` | `opentelemetry.src.metrics.instruments.Mod` | 0 | `opentelemetry/src/metrics/instruments/mod.rs` | `opentelemetry/src/metrics/instruments/Mod.kt` |
+| `metrics.mod` | `opentelemetry.src.metrics.Mod` | 0 | `opentelemetry/src/metrics/mod.rs` | `opentelemetry/src/metrics/Mod.kt` |
+| `propagation.mod` | `opentelemetry.src.propagation.Mod` | 0 | `opentelemetry/src/propagation/mod.rs` | `opentelemetry/src/propagation/Mod.kt` |
+| `testing.mod` | `opentelemetry.src.testing.Mod` | 0 | `opentelemetry/src/testing/mod.rs` | `opentelemetry/src/testing/Mod.kt` |
+| `trace.mod` | `opentelemetry.src.trace.Mod` | 0 | `opentelemetry/src/trace/mod.rs` | `opentelemetry/src/trace/Mod.kt` |
 
