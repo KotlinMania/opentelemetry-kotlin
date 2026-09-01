@@ -1,4 +1,4 @@
-// port-lint: source opentelemetry/src/context.rs
+// port-lint: source context.rs
 package io.github.kotlinmania.opentelemetry
 
 import kotlin.reflect.KClass
