@@ -1,4 +1,4 @@
-// port-lint: tests opentelemetry/src/common.rs
+// port-lint: tests common.rs
 package io.github.kotlinmania.opentelemetry
 
 import kotlin.random.Random

@@ -1,4 +1,4 @@
-// port-lint: tests opentelemetry/src/baggage.rs
+// port-lint: tests baggage.rs
 package io.github.kotlinmania.opentelemetry
 
 import kotlin.test.Test

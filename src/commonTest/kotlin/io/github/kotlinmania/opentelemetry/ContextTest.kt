@@ -1,4 +1,4 @@
-// port-lint: tests opentelemetry/src/context.rs
+// port-lint: tests context.rs
 package io.github.kotlinmania.opentelemetry
 
 import kotlin.test.Test
