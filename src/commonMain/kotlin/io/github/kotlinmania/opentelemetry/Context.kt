@@ -98,14 +98,14 @@ public class Context internal constructor(
 
     public fun <T : Any> get(clazz: KClass<T>): T? {
         @Suppress("UNCHECKED_CAST")
-        return entries[clazz.simpleName ?: ""] as? T
+        return entries[clazz.simpleName.orEmpty()] as? T
     }
 
     public inline fun <reified T : Any> get(): T? = get(T::class)
 
     public fun <T : Any> withValue(value: T): Context {
         val updated = HashMap(entries)
-        updated[value::class.simpleName ?: ""] = value
+        updated[value::class.simpleName.orEmpty()] = value
         return Context(updated, suppressTelemetry)
     }
 

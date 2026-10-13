@@ -346,7 +346,7 @@ public class InstrumentationScopeBuilder(
             scopeName = name,
             scopeVersion = version,
             scopeSchemaUrl = schemaUrl,
-            scopeAttributes = attributes ?: emptyList(),
+            scopeAttributes = attributes.orEmpty(),
         )
 }
 
