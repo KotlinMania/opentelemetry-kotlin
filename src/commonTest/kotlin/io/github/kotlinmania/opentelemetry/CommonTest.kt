@@ -36,7 +36,7 @@ class CommonTest {
             assertEquals(a, b)
         }
 
-        for (i in 0 until 100) {
+        repeat(100) {
             val randomValue = Random.nextDouble()
             val a = KeyValue.new("key", randomValue)
             val b = KeyValue.new("key", randomValue)
@@ -60,7 +60,7 @@ class CommonTest {
             assertEquals(hashHelper(kv1), hashHelper(kv2))
         }
 
-        for (i in 0 until 100) {
+        repeat(100) {
             val randomValue = Random.nextDouble()
             val kv1 = KeyValue.new("key", randomValue)
             val kv2 = KeyValue.new("key", randomValue)

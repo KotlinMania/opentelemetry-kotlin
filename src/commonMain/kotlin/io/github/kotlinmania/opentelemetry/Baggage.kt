@@ -42,8 +42,14 @@ public fun encode(s: String): String {
             0x2D, // -
             0x5F, // _
             0x7E,
-            -> sb.append(u.toChar()) // ~
-            0x20 -> sb.append("%20") // space
+            -> {
+                sb.append(u.toChar()) // ~
+            }
+
+            0x20 -> {
+                sb.append("%20") // space
+            }
+
             else -> {
                 val hex = u.toString(16).uppercase()
                 sb.append('%')
