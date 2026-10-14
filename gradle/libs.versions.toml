@@ -9,6 +9,10 @@ detekt = "2.0.0-alpha.6"
 ktlint = "14.2.0"
 ktlintEngine = "1.8.0"
 kotlinxBenchmark = "0.5.0"
+futures = "0.2.0"
+thiserror = "0.2.0"
+tokio = "0.1.1"
+tracing = "0.1.0"
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -26,6 +30,10 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "collectionsImmutable" }
 kotlinx-benchmark-runtime = { module = "org.jetbrains.kotlinx:kotlinx-benchmark-runtime", version.ref = "kotlinxBenchmark" }
+futures-kotlin = { module = "io.github.kotlinmania:futures-kotlin", version.ref = "futures" }
+thiserror-kotlin = { module = "io.github.kotlinmania:thiserror-kotlin", version.ref = "thiserror" }
+tokio-kotlin = { module = "io.github.kotlinmania:tokio-kotlin", version.ref = "tokio" }
+tracing-kotlin = { module = "io.github.kotlinmania:tracing-kotlin", version.ref = "tracing" }
 
 [bundles]
 opentelemetry-commonMain = [
@@ -34,4 +42,10 @@ opentelemetry-commonMain = [
   "kotlinx-serialization-json",
   "kotlinx-datetime",
   "collections-immutable",
+  "futures-kotlin",
+  "thiserror-kotlin",
+  "tracing-kotlin",
+]
+opentelemetry-commonTest = [
+  "tokio-kotlin",
 ]
