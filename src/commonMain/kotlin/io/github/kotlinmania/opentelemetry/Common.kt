@@ -138,11 +138,6 @@ public fun <T> displayArrayStr(slice: List<T>): String {
 }
 
 /**
- * Backward compatibility alias for Array.
- */
-public typealias ArrayValue = Array
-
-/**
  * The value part of attribute [KeyValue] pairs.
  */
 @Serializable

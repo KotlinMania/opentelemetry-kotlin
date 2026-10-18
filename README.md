@@ -246,7 +246,7 @@ For more information about the emeritus role, see the [community repository](htt
 
 ```kotlin
 dependencies {
-    implementation("io.github.kotlinmania:opentelemetry-kotlin:0.1.1")
+    implementation("io.github.kotlinmania:opentelemetry-kotlin:0.2.0")
 }
 ```
 
