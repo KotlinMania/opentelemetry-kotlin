@@ -1,4 +1,3 @@
-// port-lint: source propagation/mod.rs
 package io.github.kotlinmania.opentelemetry.propagation
 
 /**

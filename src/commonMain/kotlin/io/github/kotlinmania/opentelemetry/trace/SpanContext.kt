@@ -81,6 +81,8 @@ public class TraceState internal constructor(
 
         public val NONE: TraceState = TraceState(null)
 
+        public fun default(): TraceState = NONE
+
         public fun validKey(key: String): Boolean {
             if (key.isEmpty() || key.length > 256) return false
             var vendorStart: Int? = null

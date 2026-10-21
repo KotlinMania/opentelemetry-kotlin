@@ -2,6 +2,7 @@
 package io.github.kotlinmania.opentelemetry
 
 import kotlin.reflect.KClass
+import kotlin.reflect.safeCast
 
 public class IdHasher(
     private var value: Long = 0L,
@@ -96,10 +97,7 @@ public class Context internal constructor(
 
     public fun withTelemetrySuppressed(): Context = Context(entries, true)
 
-    public fun <T : Any> get(clazz: KClass<T>): T? {
-        @Suppress("UNCHECKED_CAST")
-        return entries[clazz.simpleName.orEmpty()] as? T
-    }
+    public fun <T : Any> get(clazz: KClass<T>): T? = clazz.safeCast(entries[clazz.simpleName.orEmpty()])
 
     public inline fun <reified T : Any> get(): T? = get(T::class)
 
