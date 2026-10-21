@@ -13,6 +13,7 @@ futures = "0.2.0"
 thiserror = "0.2.0"
 tokio = "0.1.1"
 tracing = "0.1.0"
+rand = "0.2.0"
 
 [plugins]
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
@@ -34,6 +35,7 @@ futures-kotlin = { module = "io.github.kotlinmania:futures-kotlin", version.ref 
 thiserror-kotlin = { module = "io.github.kotlinmania:thiserror-kotlin", version.ref = "thiserror" }
 tokio-kotlin = { module = "io.github.kotlinmania:tokio-kotlin", version.ref = "tokio" }
 tracing-kotlin = { module = "io.github.kotlinmania:tracing-kotlin", version.ref = "tracing" }
+rand-kotlin = { module = "io.github.kotlinmania:rand-kotlin", version.ref = "rand" }
 
 [bundles]
 opentelemetry-commonMain = [
@@ -48,4 +50,5 @@ opentelemetry-commonMain = [
 ]
 opentelemetry-commonTest = [
   "tokio-kotlin",
+  "rand-kotlin",
 ]

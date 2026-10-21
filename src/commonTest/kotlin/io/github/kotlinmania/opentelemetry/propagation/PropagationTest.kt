@@ -1,4 +1,3 @@
-// port-lint: tests propagation/mod.rs
 package io.github.kotlinmania.opentelemetry.propagation
 
 import kotlin.test.Test

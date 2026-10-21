@@ -115,4 +115,20 @@ class SpanContextTest {
         assertEquals(flags, spanContext.traceFlags)
         assertEquals(state, spanContext.traceState)
     }
+
+    @Test
+    fun testContextSpanDebug() {
+        val cx =
+            io.github.kotlinmania.opentelemetry.Context
+                .current()
+        assertEquals(
+            "Context(entries=0, suppressTelemetry=false)",
+            cx.toString(),
+        )
+        val cxRemote = cx.withRemoteSpanContext(SpanContext.NONE)
+        assertEquals(
+            "Context(entries=1, suppressTelemetry=false)",
+            cxRemote.toString(),
+        )
+    }
 }
